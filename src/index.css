@@ -12,7 +12,9 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: slategrey;
+  background: url('./components/assets/e11.png') no-repeat;  
+  background-size: cover;
+  background-position: center;
 }
 
 code {
