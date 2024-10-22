@@ -1,11 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
+import SignIn from './components/signin/signin';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-      </header>
+      <SignIn />
     </div>
   );
 }
