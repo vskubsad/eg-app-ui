@@ -1,72 +1,69 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
-import './signin.scss'
-import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaLock, FaEnvelope } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import "./signin.scss";
 
 const SignIn = () => {
-    const [action, setAction] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-    const signUp = () => {
-        setAction(' active');
-    }
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    axios
+      .post("http://localhost:3000/auth/signin", {
+        password,
+        email,
+      }, { headers: {"Authorization" : `Bearer ${sessionStorage.getItem('token')}`}})
+      .then((resp) => console.log("response: ", resp))
+  };
+  return (
+    <div className={`wrapper`}>
+      <div className="form-box signin">
+        <form onSubmit={handleSignIn}>
+          <h1>Sign In</h1>
+          <div className="input-box">
+            <input
+              type="email"
+              placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <FaEnvelope className="icon" />
+          </div>
+          <div className="input-box">
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <FaLock className="icon" />
+          </div>
+          <div className="remember-forgot">
+            <label>
+              <input type="checkbox" />
+              Remember me
+            </label>
+            <a href="#">Forgot password?</a>
+          </div>
 
-    const signIn = () => {
-        setAction('');
-    }
+          <button type="submit">SignIn</button>
 
-    return (
-        <div className={`wrapper${action}`}>
-            <div className='form-box signin'>
-                <form action="">
-                    <h1>Sign In</h1>
-                    <div className='input-box'>
-                        <input type="text" placeholder='Username' required />
-                        <FaUser className='icon'/>
-                    </div>
-                    <div className='input-box'>
-                        <input type="password" placeholder='Password' required />
-                        <FaLock className='icon'/>
-                    </div>
-                    <div className='remember-forgot'>
-                        <label><input type="checkbox" />Remember me</label>
-                        <a href="#">Forgot password?</a>
-                    </div>
-
-                    <button type="submit">SignIn</button>
-
-                    <div className='signup-link'>
-                        <p>Dont have an account? <a href='#' onClick={signUp}>Sign Up</a></p>
-                    </div>
-                </form>
-            </div>
-            <div className='form-box signup'>
-                <form action="">
-                    <h1>Sign Up</h1>
-                    <div className='input-box'>
-                        <input type="text" placeholder='Username' required />
-                        <FaUser className='icon'/>
-                    </div>
-                    <div className='input-box'>
-                        <input type="text" placeholder='Email' required />
-                        <FaEnvelope className='icon'/>
-                    </div>
-                    <div className='input-box'>
-                        <input type="password" placeholder='Password' required />
-                        <FaLock className='icon'/>
-                    </div>
-                    <div className='remember-forgot'>
-                        <label><input type="checkbox" />I agree to the terms & conditions</label>
-                        <a href="#">Forgot password?</a>
-                    </div>
-
-                    <button type="submit">SignUp</button>
-
-                    <div className='signup-link'>
-                        <p>Already have an account? <a href='#' onClick={signIn}>Sign In</a></p>
-                    </div>
-                </form>
-            </div>
-        </div>    )
-}
+          <div className="signup-link">
+            <p>
+              Dont have an account?{" "}
+              <a href="#" onClick={() => navigate("/signup")}>
+                Sign Up
+              </a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 export default SignIn;
