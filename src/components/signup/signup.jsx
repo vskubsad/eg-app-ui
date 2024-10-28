@@ -14,7 +14,8 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const handleSignUp = (e) => {
-    e.preventDefault();
+        e.preventDefault();
+
     axios
       .post("http://localhost:3000/auth/signup", {
         name: username,
@@ -26,11 +27,11 @@ const SignUp = () => {
             console.log("response: ", resp);
             if(resp.status === 201) {
                 sessionStorage.setItem('token', resp.data.token);
-                // TODO
                 navigate('/dashboard');
             }
         }
-      } );
+      } )
+      .catch(error => console.log('Error: ', error));
   };
   return (
     <div className={`wrapper`}>

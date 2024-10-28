@@ -13,11 +13,29 @@ const SignIn = () => {
   const handleSignIn = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3000/auth/signin", {
-        password,
-        email,
-      }, { headers: {"Authorization" : `Bearer ${sessionStorage.getItem('token')}`}})
-      .then((resp) => console.log("response: ", resp))
+      .post(
+        "http://localhost:3000/auth/signin",
+        {
+          password,
+          email,
+        },
+        {
+          headers: {
+            "Content-Type": "Application/json",
+            "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((resp) => {
+        if (resp) {
+          console.log("response: ", resp);
+          if (resp.status === 201) {
+            sessionStorage.setItem("token", resp.data.token);
+            navigate("/dashboard");
+          }
+        }
+      })
+      .catch((error) => console.log("Error: ", error));
   };
   return (
     <div className={`wrapper`}>
