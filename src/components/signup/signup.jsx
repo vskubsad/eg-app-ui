@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
@@ -11,10 +9,12 @@ const SignUp = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+
   const navigate = useNavigate();
 
   const handleSignUp = (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
     axios
       .post("http://localhost:3000/auth/signup", {
@@ -23,15 +23,20 @@ const SignUp = () => {
         email,
       })
       .then((resp) => {
-        if(resp){
-            console.log("response: ", resp);
-            if(resp.status === 201) {
-                sessionStorage.setItem('token', resp.data.token);
-                navigate('/dashboard');
-            }
+        if (resp) {
+          console.log("response: ", resp);
+          if (resp.status === 201) {
+            sessionStorage.setItem("token", resp.data.token);
+            navigate("/dashboard");
+          }
         }
-      } )
-      .catch(error => console.log('Error: ', error));
+      })
+      .catch((error) => {
+        console.log("Error: ", error);
+        if (error.status === 400) {
+          setError(true);
+        }
+      });
   };
   return (
     <div className={`wrapper`}>
@@ -65,6 +70,7 @@ const SignUp = () => {
             />
             <FaLock className="icon" />
           </div>
+
           <div className="remember-forgot">
             <label>
               <input type="checkbox" />I agree to the terms & conditions
@@ -82,6 +88,17 @@ const SignUp = () => {
               </a>
             </p>
           </div>
+          {error === true ? (
+            <div className="signup-error">
+              <p>Password should meet the following criteria:</p>
+              <ul>
+                <li>Minimum length of 8 characters </li>
+                <li>Contains at least 1 letter. </li>
+                <li>Contains at least 1 number.</li>
+                <li>Contains at least 1 special character.</li>
+              </ul>
+            </div>
+          ) : null}
         </form>
       </div>
     </div>

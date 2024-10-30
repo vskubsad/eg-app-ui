@@ -8,6 +8,7 @@ import "./signin.scss";
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
 
   const handleSignIn = (e) => {
@@ -22,7 +23,7 @@ const SignIn = () => {
         {
           headers: {
             "Content-Type": "Application/json",
-            "Authorization": `Bearer ${sessionStorage.getItem("token")}`,
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           },
         }
       )
@@ -35,13 +36,25 @@ const SignIn = () => {
           }
         }
       })
-      .catch((error) => console.log("Error: ", error));
+      .catch((error) => {
+        console.log("Error: ", error)
+        if (error.status === 401 || error.status === 400) {
+          setError(true);
+        }
+      }
+      );
   };
   return (
     <div className={`wrapper`}>
       <div className="form-box signin">
         <form onSubmit={handleSignIn}>
           <h1>Sign In</h1>
+          {error === true ? (
+            <div className="signin-error">
+              <p>Invalid email or password</p>
+            </div>
+          ) : null}
+
           <div className="input-box">
             <input
               type="email"
