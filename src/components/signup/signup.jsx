@@ -25,9 +25,7 @@ const SignUp = () => {
       .then((resp) => {
         if (resp) {
           console.log("response: ", resp);
-          if (resp.status === 201) {
-            navigate("/dashboard");
-          }
+          navigate("/dashboard");
         }
       })
       .catch((error) => {

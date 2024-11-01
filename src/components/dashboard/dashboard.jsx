@@ -1,11 +1,12 @@
 import { React } from 'react';
+import './dashboard.scss';
 
 const Dashboard = () => {
     return (
-        <div>
-            <h1> Welcome to the EG!!</h1>
+        <div className='dashboard'>
+            <h1>Welcome to the application</h1>
         </div>
     )
 }
 
-export default Dashboard;
+export default Dashboard; 
