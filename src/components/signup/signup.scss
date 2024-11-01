@@ -45,6 +45,11 @@
         @include input-box;
       }
 
+      .password-desc{
+        text-align: left;
+        margin-bottom: 30px;
+      }
+
       .remember-forgot {
         @include remember-forgot;
       }

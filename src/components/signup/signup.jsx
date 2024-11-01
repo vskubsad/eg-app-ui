@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 import axios from "../../core/axios.interceptor";
 
+import PasswordDescritption from "../password-cirteria/password-criteria";
 import "./signup.scss";
 
 const SignUp = () => {
@@ -10,7 +11,8 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-
+  const [isFocused, setIsFocused] = useState(false);
+  const [errorMsgs, setErrorMsgs] = useState([]);
   const navigate = useNavigate();
 
   const handleSignUp = (e) => {
@@ -32,9 +34,19 @@ const SignUp = () => {
         console.log("Error: ", error);
         if (error.status === 400 || error.status === 404) {
           setError(true);
+          setErrorMsgs(error.response.data.message);
         }
       });
   };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBur = () => {
+    setIsFocused(false);
+  };
+
   return (
     <div className={`wrapper`}>
       <div className="form-box signup">
@@ -63,10 +75,13 @@ const SignUp = () => {
               type="password"
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
+              onFocus={handleFocus}
+              onBlur={handleBur}
               required
             />
             <FaLock className="icon" />
           </div>
+          {isFocused ? <PasswordDescritption /> : null}
 
           <div className="remember-forgot">
             <label>
@@ -87,13 +102,13 @@ const SignUp = () => {
           </div>
           {error === true ? (
             <div className="signup-error">
-              <p>Password should meet the following criteria:</p>
-              <ul>
-                <li>Minimum length of 8 characters </li>
-                <li>Contains at least 1 letter. </li>
-                <li>Contains at least 1 number.</li>
-                <li>Contains at least 1 special character.</li>
-              </ul>
+              {
+                <ul>
+                  {errorMsgs?.map((msg) => (
+                    <li>{msg}</li>
+                  ))}
+                </ul>
+              }
             </div>
           ) : null}
         </form>
