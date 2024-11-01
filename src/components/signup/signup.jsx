@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
-import axios from "axios";
+import axios from "../../core/axios.interceptor";
 
 import "./signup.scss";
 
@@ -17,7 +17,7 @@ const SignUp = () => {
     e.preventDefault();
 
     axios
-      .post("http://localhost:3000/auth/signup", {
+      .post("/auth/signup", {
         name: username,
         password,
         email,
@@ -26,14 +26,13 @@ const SignUp = () => {
         if (resp) {
           console.log("response: ", resp);
           if (resp.status === 201) {
-            sessionStorage.setItem("token", resp.data.token);
             navigate("/dashboard");
           }
         }
       })
       .catch((error) => {
         console.log("Error: ", error);
-        if (error.status === 400) {
+        if (error.status === 400 || error.status === 404) {
           setError(true);
         }
       });

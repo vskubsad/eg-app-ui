@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { FaLock, FaEnvelope } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { FaLock, FaEnvelope } from "react-icons/fa";
 
+import axios from "../../core/axios.interceptor";
 import "./signin.scss";
 
 const SignIn = () => {
@@ -14,35 +14,23 @@ const SignIn = () => {
   const handleSignIn = (e) => {
     e.preventDefault();
     axios
-      .post(
-        "http://localhost:3000/auth/signin",
-        {
-          password,
-          email,
-        },
-        {
-          headers: {
-            "Content-Type": "Application/json",
-            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-          },
-        }
-      )
+      .post("/auth/signin", {
+        password,
+        email,
+      })
       .then((resp) => {
         if (resp) {
           console.log("response: ", resp);
           if (resp.status === 201) {
-            sessionStorage.setItem("token", resp.data.token);
             navigate("/dashboard");
           }
         }
       })
       .catch((error) => {
-        console.log("Error: ", error)
         if (error.status === 401 || error.status === 400) {
           setError(true);
         }
-      }
-      );
+      });
   };
   return (
     <div className={`wrapper`}>
