@@ -3,6 +3,7 @@ import './App.css';
 import SignIn from './components/signin/signin';
 import SignUp from './components/signup/signup';
 import Dashboard from './components/dashboard/dashboard';
+import NotFound from './components/NotFound/NotFound';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route exact="true" path='/' element={<SignIn/>}></Route>
         <Route path='/signup' element={<SignUp/>}></Route>
         <Route path='/dashsboard' element={<Dashboard/>}></Route>
+        <Route path="*" element={<NotFound />} />
       </Routes> 
     </div>
     </Router>
