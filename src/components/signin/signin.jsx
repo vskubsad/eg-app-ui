@@ -71,7 +71,7 @@ const SignIn = () => {
 
           <button type="submit">SignIn</button>
 
-          <div className="signup-link">
+          <div className="signin-link">
             <p>
               Dont have an account?{" "}
               <a href="#" onClick={() => navigate("/signup")}>
