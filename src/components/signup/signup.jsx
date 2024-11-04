@@ -1,0 +1,120 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
+import axios from "../../core/axios.interceptor";
+
+import PasswordDescritption from "../password-cirteria/password-criteria";
+import "./signup.scss";
+
+const SignUp = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [errorMsgs, setErrorMsgs] = useState([]);
+  const navigate = useNavigate();
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+
+    axios
+      .post("/auth/signup", {
+        name: username,
+        password,
+        email,
+      })
+      .then((resp) => {
+        if (resp) {
+          console.log("response: ", resp);
+          navigate("/dashboard");
+        }
+      })
+      .catch((error) => {
+        console.log("Error: ", error);
+        if (error.status === 400 || error.status === 404) {
+          setError(true);
+          setErrorMsgs(error.response.data.message);
+        }
+      });
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBur = () => {
+    setIsFocused(false);
+  };
+
+  return (
+    <div className={`wrapper`}>
+      <div className="form-box signup">
+        <form onSubmit={handleSignUp}>
+          <h1>Sign Up</h1>
+          <div className="input-box">
+            <input
+              type="text"
+              placeholder="Username"
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <FaUser className="icon" />
+          </div>
+          <div className="input-box">
+            <input
+              type="email"
+              placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <FaEnvelope className="icon" />
+          </div>
+          <div className="input-box">
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+              onFocus={handleFocus}
+              onBlur={handleBur}
+              required
+            />
+            <FaLock className="icon" />
+          </div>
+          {isFocused ? <PasswordDescritption /> : null}
+
+          <div className="remember-forgot">
+            <label>
+              <input type="checkbox" />I agree to the terms & conditions
+            </label>
+            <a href="#">Forgot password?</a>
+          </div>
+
+          <button type="submit">SignUp</button>
+
+          <div className="signup-link">
+            <p>
+              Already have an account?{" "}
+              <a href="#" onClick={() => navigate("/")}>
+                Sign In
+              </a>
+            </p>
+          </div>
+          {error === true ? (
+            <div className="signup-error">
+              {
+                <ul>
+                  {errorMsgs?.map((msg) => (
+                    <li>{msg}</li>
+                  ))}
+                </ul>
+              }
+            </div>
+          ) : null}
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default SignUp;

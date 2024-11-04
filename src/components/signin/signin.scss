@@ -1,0 +1,57 @@
+@import "./../../variables.scss";
+@import "./../../mixins.scss";
+
+.wrapper {
+  width: 444px;
+  height: 450px;
+  @include wrapper;
+
+  .form-box.signin {
+    transition: translate 0.18s ease;
+    translate: 0;
+
+    .signin-error {
+      @include error;
+    }
+  }
+
+  &.active {
+    height: 520px;
+    .form-box.signin {
+      transition: none;
+      translate: -400px;
+    }
+
+    .form-box.signup {
+      transition: translate 0.18s ease;
+      translate: 0;
+    }
+  }
+  .form-box.signin {
+    width: 100%;
+    padding: 40px;
+
+    form {
+      h1 {
+        font-size: 36px;
+        text-align: center;
+      }
+
+      .input-box {
+        @include input-box;
+      }
+
+      .remember-forgot {
+        @include remember-forgot;
+      }
+
+      button {
+        @include button;
+      }
+
+      .signin-link {
+        @include link;
+      }
+    }
+  }
+}
